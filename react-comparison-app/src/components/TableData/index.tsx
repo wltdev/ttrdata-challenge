@@ -8,9 +8,10 @@ type Item = {
 type Props = {
   header: string[];
   data: Item[];
+  newLines?: boolean;
 };
 
-export const TableData: FC<Props> = ({ header, data }) => {
+export const TableData: FC<Props> = ({ header, data, newLines }) => {
   return (
     <Table>
       <thead>
@@ -27,7 +28,7 @@ export const TableData: FC<Props> = ({ header, data }) => {
             {item.old && item.old.length > 0 && (
               <>
                 <tr>
-                  <Td>Old Value</Td>
+                  <Td>Old line: {index + 1}</Td>
                   {item.old?.map((oldCell, cellIndex) => (
                     <Td key={cellIndex}>{oldCell}</Td>
                   ))}
@@ -38,7 +39,10 @@ export const TableData: FC<Props> = ({ header, data }) => {
             {item.new && item.new.length > 0 && (
               <>
                 <tr>
-                  <Td>New Value</Td>
+                  <Td>
+                    {newLines ? "New line: " : "Updated line: "}
+                    {index + 1}
+                  </Td>
                   {item.new?.map((newCell, cellIndex) => (
                     <Td
                       key={cellIndex}

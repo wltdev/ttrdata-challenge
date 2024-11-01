@@ -28,43 +28,43 @@ function App() {
         <img src={logo} className="logo react" alt="React logo" />
       </a>
 
-      <h1>Comparator app</h1>
+      <h1>Line by line comparison</h1>
 
       <div className="files-content">
         <FileInput
-          label="Upload old file"
+          label="Old file"
           onChange={(file) => handleFileChange(file, true)}
         />
 
         <FileInput
-          label="Upload new file"
+          label="Updated file"
           onChange={(file) => handleFileChange(file, false)}
         />
 
-        {error && <p>{error}</p>}
-
         <div className="buttons">
           <Button
-            title="Send files"
+            title="Compare files"
+            loadingText="Comparing files..."
             loading={isLoading}
             onClick={handleSendFiles}
           />
+          {error && <span className="error">{error}</span>}
         </div>
       </div>
 
       <div className="item">
-        <h2>Idendical values</h2>
+        <h2>Idendical Lines</h2>
         <TableData data={identicalData} header={tableHeader} />
       </div>
 
       <div className="item">
-        <h2>Updated values</h2>
+        <h2>Updated Lines</h2>
         <TableData data={updatedData} header={tableHeader} />
       </div>
 
       <div className="item">
-        <h2>New values</h2>
-        <TableData data={newData} header={tableHeader} />
+        <h2>New Lines</h2>
+        <TableData data={newData} header={tableHeader} newLines />
       </div>
     </div>
   );

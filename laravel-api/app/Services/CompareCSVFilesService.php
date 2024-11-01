@@ -48,30 +48,36 @@ class CompareCSVFilesService
 
     private function compareCSVs($oldCsvValuesArray, $updatedCsvValuesArray, $identifcatorIndex = 0)
     {
+        $notEquals = [];
         $identical = [];
         $updated = [];
         $new = [];
 
         foreach ($updatedCsvValuesArray as $key => $row) {
-            $findKeyOnOld = array_search($row[$identifcatorIndex], array_column($oldCsvValuesArray, $identifcatorIndex));
-
-            if ($findKeyOnOld !== false) {
-                $oldValues = $oldCsvValuesArray[$findKeyOnOld];
-
-                if ($oldValues === $row) {
-                    $identical[] = [
-                        'old' => $oldValues
-                    ];
-                } else if ($oldValues !== $row) {
-                    $updated[] = [
-                        'old' => $oldValues,
-                        'new' => $row
-                    ];
-                }
-            } else {
+            if (!isset($oldCsvValuesArray[$key])) {
                 $new[]['new'] = $row;
+                continue;
             }
         }
+
+        foreach ($oldCsvValuesArray as $key => $row) {
+            if (!isset($updatedCsvValuesArray[$key])) {
+                continue;
+            }
+
+            if ($row === $updatedCsvValuesArray[$key]) {
+                $identical[] = [
+                    'old' => $row
+                ];
+            } else {
+                $updated[] = [
+                    'old' => $row,
+                    'new' => $updatedCsvValuesArray[$key]
+                ];
+            }
+        }
+
+
         return [
             'identical' => $identical,
             'updated' => $updated,
