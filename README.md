@@ -17,31 +17,31 @@ This project consists of two main folders: `laravel-api` and `react-comparison-a
 1. Navigate to the laravel-api folder and Install Laravel dependencies using Composer::
 
 ```
- composer install
+composer install
 ```
 
 2. Copy the .env.example file to .env and configure your environment variables (e.g., database credentials):
 
 ```
- cp .env.example .env
+cp .env.example .env
 ```
 
 3. Generate an application key:
 
 ```
- php artisan key:generate
+php artisan key:generate
 ```
 
 4. Run migrations to set up the database schema:
 
 ```
- php artisan migrate
+php artisan migrate
 ```
 
 5. Start the Laravel development server:
 
 ```
- php artisan serve
+php artisan serve
 ```
 
 The Laravel API should now be running at http://localhost:8000.
@@ -51,13 +51,13 @@ The Laravel API should now be running at http://localhost:8000.
 1. Copy the .env.example file to .env and configure your environment variables (e.g., database credentials):
 
 ```
- cp .env.example .env
+cp .env.example .env
 ```
 
 2. Start the Docker containers:
 
 ```
- docker-compose up -d
+docker-compose up -d
 ```
 
 This will build and start the Laravel API along with any required services as specified in the docker-compose.yml file.
@@ -65,7 +65,7 @@ This will build and start the Laravel API along with any required services as sp
 3. Run migrations to set up the database schema in the Docker container:
 
 ```
- docker-compose exec ttrdata-php php artisan migrate
+docker-compose exec ttrdata-php php artisan migrate
 ```
 
 The Laravel API should now be running in Docker at http://localhost:8080.
@@ -75,17 +75,17 @@ The Laravel API should now be running in Docker at http://localhost:8080.
 1. Copy the .env.example file to .env and configure your environment variables (e.g., database credentials):
 
 ```
- cp .env.example .env
+cp .env.example .env
 ```
 
 2. Install project dependencies
 
 ```
-    yarn install
+yarn install
 ```
 
 1. Start the React development server
 
 ```
-    yarn dev
+yarn dev
 ```
