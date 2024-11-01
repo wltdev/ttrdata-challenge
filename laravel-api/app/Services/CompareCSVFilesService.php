@@ -16,11 +16,18 @@ class CompareCSVFilesService
 
         $header = array_filter($explodedHeader);
 
+        $identifcatorIndex = array_search('cnpj', $header);
+        // $sortByIndex = array_search('balance_date', $header);
+
+        $oldCsvValuesArray = $this->getCSVValuesAsArray($oldCsv);
+        $updatedCsvValuesArray = $this->getCSVValuesAsArray($updatedCsv);
+
+
         [
             'identical' => $identical,
             'updated' => $updated,
             'new' => $new
-        ] = $this->compareCSVs($oldCsv, $updatedCsv);
+        ] = $this->compareCSVs($oldCsvValuesArray, $updatedCsvValuesArray, $identifcatorIndex);
 
         return [
             'header' => $header,
@@ -30,34 +37,41 @@ class CompareCSVFilesService
         ];
     }
 
-    private function compareCSVs($oldCsv, $updatedCsv)
+    private function getCSVValuesAsArray($csv)
+    {
+        $result = [];
+        foreach ($csv as $key => $row) {
+            $result[] = $this->getRowValues($row);
+        }
+        return $result;
+    }
+
+    private function compareCSVs($oldCsvValuesArray, $updatedCsvValuesArray, $identifcatorIndex = 0)
     {
         $identical = [];
         $updated = [];
         $new = [];
 
-        foreach ($oldCsv as $key => $row) {
-            if (isset($updatedCsv[$key])) {
-                if ($oldCsv[$key] === $updatedCsv[$key]) {
+        foreach ($updatedCsvValuesArray as $key => $row) {
+            $findKeyOnOld = array_search($row[$identifcatorIndex], array_column($oldCsvValuesArray, $identifcatorIndex));
+
+            if ($findKeyOnOld !== false) {
+                $oldValues = $oldCsvValuesArray[$findKeyOnOld];
+
+                if ($oldValues === $row) {
                     $identical[] = [
-                        'old' => $this->getRowValues($row)
+                        'old' => $oldValues
                     ];
-                } elseif ($oldCsv[$key] != $updatedCsv[$key]) {
+                } else if ($oldValues !== $row) {
                     $updated[] = [
-                        'old' => $this->getRowValues($row),
-                        'new' => $this->getRowValues($updatedCsv[$key])
+                        'old' => $oldValues,
+                        'new' => $row
                     ];
                 }
+            } else {
+                $new[]['new'] = $row;
             }
         }
-
-        // Processar as linhas adicionais no CSV Atualizado que não estão no mais antigo
-        foreach ($updatedCsv as $key => $row) {
-            if (!isset($oldCsv[$key])) {
-                $new[]['new'] = $this->getRowValues($row);
-            }
-        }
-
         return [
             'identical' => $identical,
             'updated' => $updated,
